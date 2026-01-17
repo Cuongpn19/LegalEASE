@@ -4,12 +4,12 @@ WORKDIR /app
 
 COPY . /app
 
-# System dependencies
+# Cài extension
 RUN apt-get update && apt-get install -y \
     git unzip libzip-dev libpng-dev libonig-dev \
     && docker-php-ext-install pdo_mysql zip
 
-# 🔥 BẮT BUỘC: tạo thư mục Laravel trước composer
+# 🔴 BẮT BUỘC – TẠO THƯ MỤC TRƯỚC COMPOSER
 RUN mkdir -p bootstrap/cache \
     storage/framework/cache \
     storage/framework/sessions \
@@ -21,7 +21,7 @@ RUN mkdir -p bootstrap/cache \
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 RUN composer install --ignore-platform-reqs --no-interaction --prefer-dist
 
-# (Nếu có frontend)
+# Nếu có frontend
 RUN npm ci && npm run build
 
 EXPOSE 8080
