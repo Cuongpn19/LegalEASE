@@ -183,7 +183,7 @@
             <div class="sidebar-box">
                 <h5 class="fw-bold mb-3 text-primary">Free Daily Summaries in Your Inbox</h5>
 
-                @foreach ([1, 2] as $w)
+                @foreach ($items as $item)
                     <div class="d-flex gap-3 mb-3">
                         <img src="{{ Storage::url($item->image) }}" style="width:70px;height:70px;object-fit:cover"
                             class="rounded">
