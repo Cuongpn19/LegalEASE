@@ -2,9 +2,16 @@ FROM php:8.2-fpm
 
 # Cài đặt các phần mở rộng cần thiết
 RUN apt-get update && apt-get install -y \
-    libpng-dev libjpeg-dev libfreetype6-dev zip git unzip nginx \
+    libpng-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
+    libzip-dev \
+    zip \
+    git \
+    unzip \
+    nginx \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install gd pdo pdo_mysql
+    && docker-php-ext-install gd pdo pdo_mysql zip
 
 # Cấu hình thư mục làm việc
 WORKDIR /app
