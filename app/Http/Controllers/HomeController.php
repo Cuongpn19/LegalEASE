@@ -20,10 +20,10 @@ class HomeController extends Controller
               if($request->has('author_id')){
                     $query->where('author_id', $request->author_id);
                 }
-                $updates = $query->latest()->paginate(10);
-                 $lawyers = User::where('role', 'lawyer')->get();
+                $items = $query->latest()->paginate(10);
+                $lawyers = User::where('role', 'lawyer')->get();
         // User chưa login → homepage public
-        return view('home', compact('updates', 'lawyers'));
+        return view('home', compact('items', 'lawyers'));
 
     }
 
