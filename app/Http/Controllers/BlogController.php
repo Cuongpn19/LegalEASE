@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Legal_updates;
+use App\Models\Specialization;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -51,5 +52,5 @@ class BlogController extends Controller
 
         return redirect()->route('lawyer.blog');
     }
-    
+
 }

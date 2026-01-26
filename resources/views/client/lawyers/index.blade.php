@@ -59,7 +59,13 @@
                                     <h5 class="fw-bold mb-1">{{ $lawyer->name }}</h5>
                                     <p class="text-primary small mb-3 fw-medium">
                                         <i class="fas fa-certificate me-1"></i>
-                                        {{ $lawyer->lawyerProfile->specialization ?? 'General Lawyer' }}
+                                        @if ($lawyer->specializations->isNotEmpty())
+                                            <span class="badge bg-light text-primary border">
+                                                {{ $lawyer->lawyerProfile->specializations->first()->name }}
+                                            </span>
+                                        @else
+                                            <span class="text-muted small">Not specified</span>
+                                        @endif
                                     </p>
                                     <p class="text-muted small mb-2">
                                         <i class="fas fa-map-marker-alt me-1 text-danger"></i>
@@ -72,7 +78,7 @@
                                                 {{ $lawyer->lawyerProfile->experience_years ?? '5+ Years' }}</i>+
                                             years</span>
                                     </div>
-                                    <a href="{{ route('client.lawyers.book', $lawyer->id) }}"
+                                    <a href="{{ route('client.lawyers.profile', $lawyer->id) }}"
                                         class="btn btn-outline-primary w-100 rounded-pill fw-bold">View
                                         Profile</a>
                                 </div>

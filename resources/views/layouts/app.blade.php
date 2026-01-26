@@ -118,7 +118,7 @@
         }
 
         .footer-legalease a:hover {
-            text-decoration: underline;
+            text-decoration: none;
             color: red;
         }
 
@@ -164,7 +164,7 @@
         }
 
         .card-body a:hover h6 {
-            text-decoration: underline;
+            text-decoration: none;
         }
 
         .section-link {
@@ -173,7 +173,7 @@
         }
 
         .section-link:hover {
-            text-decoration: unset;
+            text-decoration: none;
         }
 
         .section-title a {
@@ -212,7 +212,7 @@
 
         /* Footer Hover */
         .footer-legalease a:hover {
-            text-decoration: underline;
+            text-decoration: none;
             opacity: 0.8;
         }
 
@@ -228,48 +228,147 @@
                 justify-content: center;
             }
         }
+
+        /* MAIN NAV ACTIVE */
+        .main-nav .nav-link {
+            position: relative;
+            padding-bottom: 6px;
+        }
+
+        .main-nav .nav-link:hover {
+            color: #ffd700 !important;
+        }
+
+        .main-nav .active-nav {
+            color: #ffd700 !important;
+        }
+
+        .main-nav .active-nav::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 2px;
+            background: #ffd700;
+        }
+
+        @media (max-width: 768px) {
+            .main-nav .container {
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+
+            .main-nav .nav-link {
+                flex-shrink: 0;
+            }
+        }
+
+        .main-nav .active-nav {
+            color: #ffd700 !important;
+        }
+
+        .main-nav .active-nav::after {
+            content: "";
+            display: block;
+            height: 2px;
+            background: #ffd700;
+            margin-top: 4px;
+        }
+
+        /* CENTER SEARCH IN TOPBAR */
+        .topbar-search {
+            display: flex;
+            align-items: center;
+            /* CĂN GIỮA THEO CHIỀU DỌC */
+            height: 100%;
+        }
+
+        .top-bar .form-control {
+            height: 40px;
+            /* Đồng bộ chiều cao */
+            line-height: 32px;
+        }
     </style>
 </head>
 
-<body>
+<body class="d-flex flex-column min-vh-100">
 
     {{-- TOP BAR --}}
-    <div class="top-bar sticky-nav py-2"
-        style="background-color: #06357a; border-bottom: 1px solid rgba(255,255,255,0.1);">
+    <div class="top-bar sticky-nav" style="padding: 10px 0;">
         <div class="container d-flex align-items-center justify-content-between">
-            <a href="{{ route('home') }}" class="text-decoration-none d-flex align-items-center">
-                <h1 class="m-0 fw-bold text-white" style="letter-spacing: 1px; font-size: 28px;">LEGAL EASE</h1>
+
+            <a href="{{ route('home') }}" class="text-decoration-none">
+                <span class="fw-bold text-white" style="font-size: 22px; letter-spacing: 1px;">
+                    LEGAL EASE
+                </span>
             </a>
 
             <div class="d-flex align-items-center gap-3">
-                <div class="position-relative d-none d-md-block">
-                    <input type="text" class="form-control form-control-sm ps-3 pe-5 rounded-pill"
-                        placeholder="Search" style="width: 250px;">
-                    <i class="fas fa-search position-absolute top-50 end-0 translate-middle-y me-3 text-muted"></i>
-                </div>
-                <div class="auth-buttons d-flex gap-2">
-                    <a href="{{ route('login') }}" class="btn btn-sm text-white fw-bold px-3">Log In</a>
-                    <a href="{{ route('register') }}"
-                        class="btn btn-sm btn-outline-light rounded-pill px-4 fw-bold">Sign Up</a>
-                </div>
+                <form action="{{ route('search') }}" method="GET" class="position-relative d-none d-md-block">
+
+                    <div class="topbar-search d-none d-md-flex">
+                        <input type="search" name="q" class="form-control form-control-sm rounded-pill ps-3 pe-5"
+                            placeholder="Search lawyers, topics..." style="width: 220px;" value="{{ request('q') }}">
+                    </div>
+
+                    <button type="submit"
+                        class="btn position-absolute top-50 end-0 translate-middle-y me-2 p-0 border-0 bg-transparent">
+                        <i class="fas fa-search text-muted"></i>
+                    </button>
+                </form>
+
+
+                <a href="{{ route('login') }}" class="text-white small fw-bold">Log In</a>
+                <a href="{{ route('register') }}" class="btn btn-sm btn-outline-light rounded-pill px-3 fw-bold">
+                    Sign Up
+                </a>
             </div>
         </div>
     </div>
 
+
     {{-- NAV --}}
     <div class="main-nav py-2 shadow-sm" style="background-color: #0b3f8a;">
         <div class="container d-flex gap-4">
-            <a href="#" class="nav-link text-white small fw-bold text-uppercase">Find a Lawyer</a>
-            <a href="#" class="nav-link text-white small fw-bold text-uppercase">Ask a Lawyer</a>
-            <a href="#" class="nav-link text-white small fw-bold text-uppercase">Research the Law</a>
-            <a href="#" class="nav-link text-white small fw-bold text-uppercase">Laws & Regs</a>
+            <a href="{{ route('find.lawyer') }}"
+                class="nav-link text-white small fw-bold text-uppercase
+           {{ request()->routeIs('find.lawyer') ? 'active-nav' : '' }}">
+                Find a Lawyer
+            </a>
+
+            <a href="{{ route('ask.lawyer') }}"
+                class="nav-link text-white small fw-bold text-uppercase
+           {{ request()->routeIs('ask.lawyer') ? 'active-nav' : '' }}">
+                Ask a Lawyer
+            </a>
+
+            <a href="{{ route('research.law') }}"
+                class="nav-link text-white small fw-bold text-uppercase
+           {{ request()->routeIs('research.law') ? 'active-nav' : '' }}">
+                Research the Law
+            </a>
+
+            <a href="{{ route('about') }}"
+                class="nav-link text-white small fw-bold text-uppercase
+           {{ request()->routeIs('about') ? 'active-nav' : '' }}">
+                About
+            </a>
+
+            <a href="{{ route('contact') }}"
+                class="nav-link text-white small fw-bold text-uppercase
+           {{ request()->routeIs('contact') ? 'active-nav' : '' }}">
+                Contact
+            </a>
         </div>
     </div>
 
     {{-- MAIN --}}
-    <div class="container my-4">
-        @yield('content')
-    </div>
+    <main class="flex-grow-1">
+        <div class="container my-4">
+            @yield('content')
+        </div>
+    </main>
 
     <footer class="footer-legalease" style="background-color: #06357a; color: #fff; padding: 25px 0;">
         <div class="container d-flex flex-wrap align-items-center justify-content-between gap-3">

@@ -1,5 +1,105 @@
 @extends('layouts.app')
+<style>
+    /* =========================
+   MOBILE RESPONSIVE
+   ========================= */
+    @media (max-width: 768px) {
 
+        /* HEADER */
+        .top-bar h1 {
+            font-size: 20px !important;
+            letter-spacing: 0.5px;
+        }
+
+        .top-bar .auth-buttons a {
+            font-size: 12px;
+            padding: 4px 10px;
+        }
+
+        .top-bar .form-control {
+            display: none;
+            /* Ẩn search trên mobile */
+        }
+
+        /* NAV */
+        .main-nav .container {
+            overflow-x: auto;
+            white-space: nowrap;
+            gap: 16px;
+        }
+
+        .main-nav a {
+            font-size: 12px;
+        }
+
+        /* CONTENT */
+        .content-box {
+            padding: 15px;
+        }
+
+        h4.section-title,
+        h4.section-titles,
+        h4.section-title1 {
+            font-size: 1.3rem !important;
+            font-weight: 800;
+            text-transform: none;
+        }
+
+        /* CARD */
+        .card-img-top {
+            height: 140px !important;
+        }
+
+        .card h6 {
+            font-size: 14px;
+        }
+
+        .card p {
+            font-size: 12px;
+        }
+
+        /* GRID */
+        .col-md-6 {
+            width: 100%;
+        }
+
+        /* SIDEBAR */
+        .sidebar-box {
+            padding: 14px;
+        }
+
+        .sidebar-box h5 {
+            font-size: 15px;
+        }
+
+        .sidebar-box img {
+            width: 60px !important;
+            height: 60px !important;
+        }
+
+        .sidebar-box .fw-bold {
+            font-size: 13px;
+        }
+
+        .sidebar-box .small {
+            font-size: 12px;
+        }
+
+        /* FOOTER */
+        .footer-legalease {
+            text-align: center;
+        }
+
+        .footer-social {
+            justify-content: center;
+            margin: 10px 0;
+        }
+
+        .footer-links {
+            justify-content: center;
+        }
+    }
+</style>
 @section('title', 'Home')
 
 @section('content')
@@ -48,7 +148,7 @@
             </div>
 
             <div class="content-box">
-                <h4 class="section-title">Legal Research & Law Practice</h4>
+                <h4 class="section-title1">Legal Research & Law Practice</h4>
 
                 <div class="row">
                     @foreach ([['Laws: Cases & Codes', 'US Constitution, US Laws, State Laws...'], ['US Federal Government', 'Executive, Congress, Courts...'], ['US Courts', 'Supreme Court, Federal Courts, State Courts...'], ['US States', 'California, Texas, Florida, New York...']] as [$title, $desc])

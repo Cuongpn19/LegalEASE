@@ -3,13 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\Appointments;
+use App\Models\Availabilities;
 use App\Models\Lawyer_profiles;
 use App\Models\Specialization;
 use App\Models\Consultation;
+use App\Models\Reviews;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
 
 class LawyerProfilesController extends Controller
 {
@@ -104,32 +107,73 @@ class LawyerProfilesController extends Controller
      * Update the specified resource in storage.
      */
    public function update(Request $request)
-{
-    $id = Auth::id();
-    $lawyer = Lawyer_Profiles::with('user')->where('user_id', $id)->firstOrFail();
+    {
+        $id = Auth::id();
+        $lawyer = Lawyer_Profiles::with('user')->where('user_id', $id)->firstOrFail();
 
-    $data = $request->validate([
-        'name' => 'required|string|max:255',
-        'location' => 'nullable|string|max:255',
-        'experience_years' => 'nullable|integer|min:0',
-        'bio' => 'nullable|string',
-        'specializations' => 'nullable|array',
-    ]);
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'location' => 'nullable|string|max:255',
+            'experience_years' => 'nullable|integer|min:0',
+            'bio' => 'nullable|string',
+            'specializations' => 'nullable|array',
+        ]);
 
-    // 1. Cập nhật lại cái tên thật vào bảng users
-    $lawyer->user->update(['name' => $data['name']]);
+        // 1. Cập nhật lại cái tên thật vào bảng users
+        $lawyer->user->update(['name' => $data['name']]);
 
-    // 2. Cập nhật hồ sơ (Bỏ 'name' ra để không bị lỗi Unknown column)
-    $lawyer->update($request->only(['location', 'experience_years', 'bio']));
+        // 2. Cập nhật hồ sơ (Bỏ 'name' ra để không bị lỗi Unknown column)
+        $lawyer->update($request->only(['location', 'experience_years', 'bio']));
 
-    // 3. Cập nhật chuyên môn (Bảng trung gian)
-    if ($request->has('specializations')) {
-        $lawyer->specializations()->sync($request->specializations);
+        // 3. Cập nhật chuyên môn (Bảng trung gian)
+        if ($request->has('specializations')) {
+            $lawyer->specializations()->sync($request->specializations);
+        }
+
+        // 4. Chuyển hướng về đúng view Index
+        return redirect()->route('lawyer.profile')->with('success', 'Updated!');
     }
 
-    // 4. Chuyển hướng về đúng view Index
-    return redirect()->route('lawyer.profile')->with('success', 'Updated!');
-}
+    public function updateAccount(Request $request)
+    {
+        $id = Auth::id();
+
+        $validatedAccount = $request->validate([
+            'name'  => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $id,
+        ]);
+
+        User::where('id', $id)->update($validatedAccount);
+
+        return back()->with('success', 'Account information updated.');
+    }
+
+    public function updateProfile(Request $request)
+    {
+        // dd($request->all());
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        $validatedProfile = $request->validate([
+            'name' => 'required|string|max:255',
+            'location' => 'nullable|string|max:255',
+            'experience_years' => 'nullable|integer|min:0',
+            'bio' => 'nullable|string',
+            'specializations' => 'nullable|array',
+        ]);
+
+        $user->lawyerProfileProfile()->updateOrCreate(
+            ['user_id' => $user->id],
+                [
+                    'name' => $validatedProfile['full_name'], // or 'name'
+                    'location' => $validatedProfile['location'],
+                    'experience_years' => $validatedProfile['experience_years'],
+                    'bio' => $validatedProfile['bio'],
+                    'specializations' => $validatedProfile['specializations'],
+                ]
+        );
+        return back()->with('success', 'Profile information updated.');
+    }
 
     /**
      * Remove the specified resource from storage.
@@ -138,6 +182,46 @@ class LawyerProfilesController extends Controller
     {
         User::where('id', $id)->where('role', 'lawyer')->delete();
         return back()->with('success', 'Đã xóa luật sư thành công!');
+    }
+
+     public function settings()
+    {
+        $user = Auth::user();
+        return view('lawyer.settings', compact('user'));
+    }
+
+    public function updateSettings(Request $request)
+    {
+        // Lấy đối tượng user hiện tại
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        // Kiểm tra nếu user chưa đăng nhập (đề phòng)
+        if (!$user) {
+            return redirect()->route('login');
+        }
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'password' => ['nullable', 'confirmed', Password::defaults()],
+        ], [
+            'name.required' => 'Vui lòng nhập họ tên.',
+            'email.unique' => 'Email này đã có người sử dụng.',
+            'password.confirmed' => 'Xác nhận mật khẩu không khớp.'
+        ]);
+
+        // Cập nhật thông tin
+        $user->name = $request->name;
+        $user->email = $request->email;
+
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->password);
+        }
+
+        $user->save();
+
+        return back()->with('success', 'Account information updated successfully!');
     }
 
     public function pendingList(Request $request)
@@ -164,7 +248,10 @@ class LawyerProfilesController extends Controller
     public function profile(){
         $id=Auth::id();
         $lawyer=Lawyer_Profiles::with('specializations')->where('user_id', $id)->firstOrFail();
-        return view('lawyer.profile.index', compact('lawyer'));
+        $lawyers=Availabilities::where('lawyer_id', $lawyer->id)->first();
+        $rate=Reviews::with('user')->where('lawyer_id', $id)->get();
+        $date=Appointments::where('lawyer_id', $id)->get();
+        return view('lawyer.profile.index', compact('lawyers','date','rate','lawyer'));
     }
 
     public function question(){
@@ -199,4 +286,36 @@ class LawyerProfilesController extends Controller
     public function blog(){
         return view('lawyer.blog.index');
     }
+
+    public function index1(Request $request)
+    {
+       $lawyers = Lawyer_Profiles::with(['user', 'specializations'])
+        // Search theo tên luật sư
+        ->when($request->keyword, function ($q) use ($request) {
+            $q->whereHas('user', function ($u) use ($request) {
+                $u->where('name', 'like', '%' . $request->keyword . '%');
+            });
+        })
+
+        // Filter theo specialization
+        ->when($request->specialization, function ($q) use ($request) {
+            $q->whereHas('specializations', function ($s) use ($request) {
+                $s->where('specialization_id', $request->specialization);
+            });
+        })
+
+        // Filter theo location
+        ->when($request->location, function ($q) use ($request) {
+            $q->where('location', 'like', '%' . $request->location . '%');
+        })
+
+        ->paginate(5)
+        ->withQueryString(); // giữ param khi chuyển page
+
+        $specializations = Specialization::all();
+
+        return view('pages.findLawyer', compact('lawyers', 'specializations'));
+
+    }
+
 }

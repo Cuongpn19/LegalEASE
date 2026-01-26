@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Legal_updates;
+use App\Models\Specialization;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,6 +16,7 @@ class LegalUpdatesController extends Controller
      */
     public function index(Request $request)
     {
+
         $query = Legal_updates::with('author');
 
         if($request->has('author_id')){
@@ -25,6 +27,29 @@ class LegalUpdatesController extends Controller
 
         return view('admin.contents.index', compact('updates', 'lawyers'));
     }
+
+    public function index1(Request $request)
+    {
+        $updates = Legal_updates::when($request->keyword, function ($q) use ($request) {
+                $q->where('title', 'like', '%' . $request->keyword . '%');
+            })
+            ->when($request->specialization, function ($q) use ($request) {
+                $q->where('specialization_id', $request->specialization);
+            })
+            ->paginate(5)
+            ->withQueryString();
+
+        $specializations = Specialization::all();
+
+        return view('pages.askLawyer', compact('updates', 'specializations'));
+    }
+
+    public function show1(Legal_updates $update)
+    {
+        return view('pages.askLawyerDetail', compact('update'));
+    }
+
+
 
     public function authorProfile($id)
     {

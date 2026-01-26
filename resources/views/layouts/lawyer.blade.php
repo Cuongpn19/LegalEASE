@@ -166,7 +166,7 @@
                             {{ Auth::user()->name }}
                         </a>
                         <div class="dropdown-menu dropdown-menu-end shadow border-0 p-2 mt-2">
-                            <a class="dropdown-item rounded" href="{{ route('admin.settings') }}">
+                            <a class="dropdown-item rounded" href="{{ route('lawyer.settings') }}">
                                 <i class="fas fa-user-cog me-2 text-muted"></i> Setting
                             </a>
                             <div class="dropdown-divider"></div>

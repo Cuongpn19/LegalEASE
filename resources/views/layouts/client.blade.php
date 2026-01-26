@@ -95,14 +95,16 @@
                     <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
                         <li class="nav-item">
                             <a class="nav-link {{ request()->is('client/dashboard') ? 'active' : '' }}"
-                                href="{{ route('client.dashboard') }}">Dashboard</a>
+                                href="{{ route('client.dashboard') }}"><i class="fas fa-home me-1 small"></i>
+                                Dashboard</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('client.lawyers.index') }}"><i
                                     class="fas fa-search me-1 small"></i> Find Lawyer</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('client.appointments.index') }}">My Appointments</a>
+                            <a class="nav-link" href="{{ route('client.appointments.index') }}"><i
+                                    class="fas fa-calendar-check me-1 small"></i> My Appointments</a>
                         </li>
                     </ul>
 

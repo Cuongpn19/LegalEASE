@@ -44,7 +44,7 @@
                             <div class="col-md-4 d-none d-md-flex align-items-center justify-content-end">
                                 <div class="image-wrapper">
                                     <img src="{{ asset('storage/uploads/contents/business-8598080_640.jpg') }}"
-                                        class="img-fluid welcome-img">
+                                        class="img-fluid welcome-img" onerror="this.style.display='none'">
 
                                 </div>
                             </div>

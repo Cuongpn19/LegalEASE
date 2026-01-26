@@ -22,6 +22,21 @@ use App\Http\Controllers\BlogController;
 |--------------------------------------------------------------------------
 */
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
+
+Route::get('/find-a-lawyer', [LawyerProfilesController::class, 'index1'])
+    ->name('find.lawyer');
+
+Route::get('/ask-a-lawyer', [LegalUpdatesController::class, 'index1'])
+    ->name('ask.lawyer');
+
+Route::get('/ask-a-lawyer/{update}', [LegalUpdatesController::class, 'show1'])
+    ->name('ask.lawyer.show');
+
+Route::get('/research-the-law',function() {
+    return view('pages.researchLaw');
+})->name('research.law');
+
 Route::get('/about', function () {
     return view('pages.about');
 })->name('about');
@@ -30,7 +45,10 @@ Route::get('/contact', function () {
     return view('pages.contact');
 })->name('contact');
 
-// web.php
+Route::get('/search', function () {
+    return view('pages.search');
+})->name('search');
+
 Route::get('/blog/{id}', [HomeController::class, 'show'])
     ->name('blog.show');
 
@@ -118,12 +136,8 @@ Route::middleware(['auth', 'PreventBackHistory'])->group(function () {
         Route::get('/export-feedback', [ReportController::class, 'exportFeedback'])->name('export.feedback');
     });
 
-    Route::resource('lawyers', LawyerProfilesController::class);
-    Route::resource('clients', ClientProfilesController::class);
     Route::resource('contents', LegalUpdatesController::class);
 
-
-    Route::get('/dashboard', [ClientProfilesController::class, 'dashboard'])->name('dashboard');
     Route::get('/lawyers', [ClientProfilesController::class, 'findLawyer'])->name('lawyers.index');
     Route::get('/lawyers/{id}/book', [ClientProfilesController::class, 'showBookingForm'])->name('lawyers.book');
     Route::post('/lawyers/book', [ClientProfilesController::class, 'storeBooking'])->name('lawyers.storeBooking');
@@ -132,6 +146,7 @@ Route::middleware(['auth', 'PreventBackHistory'])->group(function () {
     Route::post('/appointments/{id}/review', [ClientProfilesController::class, 'storeReview'])->name('reviews.store');
     // My Profile
     Route::get('/profile', [ClientProfilesController::class, 'myProfile'])->name('profile');
+    Route::post('/account/update', [ClientProfilesController::class, 'updateAccount'])->name('account.update');
     Route::post('/profile/update', [ClientProfilesController::class, 'updateProfile'])->name('profile.update');
 
     // Settings
@@ -256,6 +271,10 @@ Route::middleware(['auth', 'role:lawyer'])
             // //Hiển thị Blog
             Route::get('/blog', [BlogController::class, 'index'])
             ->name('blog');
+             Route::get('/settings', [LawyerProfilesController::class, 'settings'])
+            ->name('settings');
+            Route::put('/settings/update', [LawyerProfilesController::class, 'updateSettings'])
+            ->name('settings.update');
 
            // ai cũng xem được blog
             // Route::get('/blogs', [BlogController::class, 'index'])->name('blogs.index');
@@ -277,8 +296,9 @@ Route::middleware(['auth', 'role:lawyer'])
         ->name('storequestion');
         Route::get('/blog', [BlogController::class, 'index'])
             ->name('blog');
-        Route::get('/dashboard', [ClientProfilesController::class, 'dashboard'])->name('dashboard');
+    Route::get('/dashboard', [ClientProfilesController::class, 'dashboard'])->name('dashboard');
     Route::get('/lawyers', [ClientProfilesController::class, 'findLawyer'])->name('lawyers.index');
+    Route::get('/lawyers/profile/{id}', [ClientProfilesController::class, 'showLawyer'])->name('lawyers.profile');
     Route::get('/check-availability', [ClientProfilesController::class, 'checkAvailability'])->name('lawyers.checkAvailability');
     Route::get('/lawyers/{id}/book', [ClientProfilesController::class, 'showBookingForm'])->name('lawyers.book');
     Route::post('/lawyers/book', [ClientProfilesController::class, 'storeBooking'])->name('lawyers.storeBooking');
@@ -287,6 +307,7 @@ Route::middleware(['auth', 'role:lawyer'])
     Route::post('/appointments/{id}/review', [ClientProfilesController::class, 'storeReview'])->name('reviews.store');
     // My Profile
     Route::get('/profile', [ClientProfilesController::class, 'myProfile'])->name('profile');
+    Route::post('/account/update', [ClientProfilesController::class, 'updateAccount'])->name('account.update');
     Route::post('/profile/update', [ClientProfilesController::class, 'updateProfile'])->name('profile.update');
 
     // Settings

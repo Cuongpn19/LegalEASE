@@ -310,20 +310,45 @@ class ClientProfilesController extends Controller
     public function myProfile()
     {
         $user = Auth::user();
-        return view('client.profile.index', compact('user'));
+        $profile = $user->clientProfile;
+        return view('client.profile.index', compact('user', 'profile'));
     }
 
-    public function updateProfile(Request $request) {
+    public function updateAccount(Request $request)
+    {
+        $id = Auth::id();
+
+        $validatedAccount = $request->validate([
+            'name'  => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $id,
+        ]);
+
+        User::where('id', $id)->update($validatedAccount);
+
+        return back()->with('success', 'Account information updated.');
+    }
+
+    public function updateProfile(Request $request)
+    {
         // dd($request->all());
         /** @var \App\Models\User $user */
         $user = Auth::user();
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $user->id,
+
+        $validatedProfile = $request->validate([
+            'full_name' => 'required|string|max:50',
+            'phone_number' => 'nullable|string|max:20|regex:/^\d+$/',
+            'address'      => 'nullable|string|max:255',
         ]);
 
-        $user->update($request->only('name', 'email'));
-        return back()->with('success', 'Personal information has been updated!');
+        $user->clientProfile()->updateOrCreate(
+            ['user_id' => $user->id],
+                [
+                    'name' => $validatedProfile['full_name'], // or 'name'
+                    'phone_number' => $validatedProfile['phone_number'],
+                    'address' => $validatedProfile['address'],
+                ]
+        );
+        return back()->with('success', 'Profile information updated.');
     }
 
     public function settings() {

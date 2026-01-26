@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 class Legal_updates extends Model
-{
+{   protected $table = 'legal_updates';
     protected $fillable = [
         'title',
         'content',
@@ -16,4 +16,5 @@ class Legal_updates extends Model
     {
         return $this->belongsTo(User::class, 'author_id');
     }
+    
 }

@@ -31,13 +31,11 @@
                         </div>
 
                         <div class="d-flex gap-4 small text-muted">
-                            <span>
-                                <i class="fas fa-briefcase"></i>
-                                {{ $lawyer->lawyerProfile->experience_years ?? 0 }}+ Years
-                            </span>
-                            <span>
-                                <i class="fas fa-star text-warning"></i> 4.8 Rating
-                            </span>
+                            <span><i class="fas fa-briefcase text-muted">
+                                    {{ $lawyer->lawyerProfile->experience_years ?? '5+ Years' }}</i>+
+                                years</span>
+                            <span><i class="fas fa-star text-warning">
+                                    {{ $lawyer->lawyerProfile->rating ?? '4.8' }}</i></span>
                         </div>
                     </div>
                 </div>
@@ -71,13 +69,20 @@
                         </h5>
 
                         <div class="d-flex flex-wrap gap-2">
-                            @forelse($lawyer->lawyerProfile->specializations as $spec)
+                            {{-- @forelse($lawyer->lawyerProfile->specializations as $spec)
                                 <span class="badge bg-light text-primary border">
                                     {{ $spec->name }}
                                 </span>
                             @empty
                                 <span class="text-muted small">Not specified</span>
-                            @endforelse
+                            @endforelse --}}
+                            @if ($lawyer->specializations->isNotEmpty())
+                                <span class="badge bg-light text-primary border">
+                                    {{ $lawyer->specializations->first()->name }}
+                                </span>
+                            @else
+                                <span class="text-muted small">Not specified</span>
+                            @endif
                         </div>
                     </div>
                 </div>

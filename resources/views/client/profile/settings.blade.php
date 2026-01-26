@@ -16,17 +16,35 @@
                                     class="form-control rounded-pill border-0 bg-light px-4 shadow-none">
                             </div>
 
+                            @error('current_password')
+                                <div class="text-danger small mt-1">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+
                             <div class="mb-3">
                                 <label class="form-label fw-bold">New password</label>
                                 <input type="password" name="new_password"
                                     class="form-control rounded-pill border-0 bg-light px-4 shadow-none">
                             </div>
 
+                            @error('new_password')
+                                <div class="text-danger small mt-1">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+
                             <div class="mb-4">
                                 <label class="form-label fw-bold">Confirm new password</label>
                                 <input type="password" name="new_password_confirmation"
                                     class="form-control rounded-pill border-0 bg-light px-4 shadow-none">
                             </div>
+
+                            @error('new_password_confirmation')
+                                <div class="text-danger small mt-1">
+                                    {{ $message }}
+                                </div>
+                            @enderror
 
                             <button type="submit" class="btn btn-dark w-100 rounded-pill fw-bold py-2 shadow">
                                 Update password

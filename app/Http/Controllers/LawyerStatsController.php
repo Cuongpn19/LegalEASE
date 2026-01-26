@@ -20,7 +20,7 @@ class LawyerStatsController extends Controller
 
     // 1. Đếm số lịch hẹn riêng trong ngày hôm nay của luật sư này
     $todayCount = Appointments::where('lawyer_id', $lawyerId)
-        ->whereDate('appointment_date', $today->toDateString())
+        ->whereDate('appointment_date', now()->format('Y-m-d'))
         ->count();
 
     // 2. Các thông số khác cho card thống kê
@@ -31,13 +31,13 @@ class LawyerStatsController extends Controller
     // 3. Lấy danh sách lịch hẹn để truyền vào JS cho Calendar
   $appointments = Appointments::where('lawyer_id', $lawyerId)
     ->with('client:id,name')
-    ->select('id', 'appointment_date', 'start_time', 'client_id', 'status')
+    ->select('id', 'appointment_date', 'start_time', 'client_id', 'status', 'notes')
     ->get()
     ->toArray();
 
     $today = now();
     $todayCount = Appointments::where('lawyer_id', $lawyerId)
-        ->whereDate('appointment_date', $today->toDateString())
+        ->whereDate('appointment_date', now()->format('Y-m-d'))
         ->count();
     $name = $user;
     $pending = Appointments::where('lawyer_id', $lawyerId)->where('status', 'pending')->count();

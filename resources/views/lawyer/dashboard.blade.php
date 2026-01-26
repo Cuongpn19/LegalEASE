@@ -294,7 +294,7 @@
                 <img src="{{ asset('storage/uploads/contents/business-8598080_640.jpg') }}" class="profile-img">
                 <p class="lawyer-name">{{ $name->name }}</p>
                 <h1 class="meeting-title">1 Hour Meeting</h1>
-                <div class="duration"><i class="far fa-clock me-2"></i> 1 Hour</div>
+                <div class="duration"><i class="far fa-clock me-2"></i> 1 Hour for meeting!</div>
                 <p class="desc">
                     Today <strong>{{ $today->format('d/m/Y') }}</strong>,
                     you have <span class="badge bg-primary">{{ $todayCount }}</span>
@@ -478,7 +478,9 @@
         </div>
         <div class="p-2">
             <small class="text-muted d-block">Note</small>
-            <p class="text-muted">${data.notes || 'Empty'}</p>
+            <p class="text-muted">
+                ${(data.notes && data.notes.trim() !== "") ? data.notes : "No notes provided."}
+            </p>
         </div>
     `;
 
