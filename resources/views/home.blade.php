@@ -190,10 +190,11 @@
 
                         <div>
                             <div class="fw-bold small">
-                                {{ $w == 1 ? 'AI & SEO Highlights' : 'Managing Difficult Clients' }}
+                                {{-- Dùng $loop->iteration thay cho $w --}}
+                                {{ $loop->iteration == 1 ? 'AI & SEO Highlights' : 'Managing Difficult Clients' }}
                             </div>
                             <div class="small text-muted">
-                                {{ $w == 1 ? 'Jan 14, 2pm ET' : 'Jan 16, 1pm ET' }}
+                                {{ $loop->iteration == 1 ? 'Jan 14, 2pm ET' : 'Jan 16, 1pm ET' }}
                             </div>
                         </div>
                     </div>
@@ -210,10 +211,11 @@
 
                         <div>
                             <div class="fw-bold small">
-                                {{ $w == 1 ? 'AI & SEO Highlights' : 'Managing Difficult Clients' }}
+                                {{-- Dùng $loop->iteration thay cho $w --}}
+                                {{ $loop->iteration == 1 ? 'AI & SEO Highlights' : 'Managing Difficult Clients' }}
                             </div>
                             <div class="small text-muted">
-                                {{ $w == 1 ? 'Jan 14, 2pm ET' : 'Jan 16, 1pm ET' }}
+                                {{ $loop->iteration == 1 ? 'Jan 14, 2pm ET' : 'Jan 16, 1pm ET' }}
                             </div>
                         </div>
                     </div>
@@ -231,10 +233,11 @@
 
                         <div>
                             <div class="fw-bold small">
-                                {{ $w == 1 ? 'AI & SEO Highlights' : 'Managing Difficult Clients' }}
+                                {{-- Dùng $loop->iteration thay cho $w --}}
+                                {{ $loop->iteration == 1 ? 'AI & SEO Highlights' : 'Managing Difficult Clients' }}
                             </div>
                             <div class="small text-muted">
-                                {{ $w == 1 ? 'Jan 14, 2pm ET' : 'Jan 16, 1pm ET' }}
+                                {{ $loop->iteration == 1 ? 'Jan 14, 2pm ET' : 'Jan 16, 1pm ET' }}
                             </div>
                         </div>
                     </div>
@@ -251,10 +254,11 @@
 
                         <div>
                             <div class="fw-bold small">
-                                {{ $w == 1 ? 'AI & SEO Highlights' : 'Managing Difficult Clients' }}
+                                {{-- Dùng $loop->iteration thay cho $w --}}
+                                {{ $loop->iteration == 1 ? 'AI & SEO Highlights' : 'Managing Difficult Clients' }}
                             </div>
                             <div class="small text-muted">
-                                {{ $w == 1 ? 'Jan 14, 2pm ET' : 'Jan 16, 1pm ET' }}
+                                {{ $loop->iteration == 1 ? 'Jan 14, 2pm ET' : 'Jan 16, 1pm ET' }}
                             </div>
                         </div>
                     </div>
